@@ -13,6 +13,8 @@ RAW_LDRAW_DIR           = RAW_DIR / "ldraw"
 PROCESSED_DIR           = DATA_DIR / "processed"
 BRONZE_DIR              = PROCESSED_DIR / "bronze"
 BRONZE_CATALOGUE_DIR    = BRONZE_DIR / "catalogue"
+BRONZE_GEOMETRY_DIR     = BRONZE_DIR / "geometry"
+
 
 
 PARTS_TO_PROCESS = [
