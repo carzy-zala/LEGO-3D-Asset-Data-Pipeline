@@ -3,6 +3,7 @@ import pandas as pd
 from pathlib import Path
 
 from config import (
+    LDRAW_LIBRARY_PARTS_DIR,
     RAW_LDRAW_DIR,
     BRONZE_GEOMETRY_DIR,
     PARTS_TO_PROCESS
@@ -12,7 +13,7 @@ from src.transformation.bronze.ldraw.src.DS2B_ldraw import parse_dat_file
 
 logger = get_logger("bronze")
 
-
+# Config file path
 CONFIG_PATH = Path(__file__).parent.parent / "config" / "DS2B_ldraw_config.json"
 
 
@@ -66,7 +67,8 @@ def run_ldraw_bronze() -> None:
         try:
             description, coordinates = parse_dat_file(
                 dat_path            = dat_path,
-                geometry_line_types = geometry_line_types
+                geometry_line_types = geometry_line_types,
+                ldraw_parts_dir     = LDRAW_LIBRARY_PARTS_DIR
             )
 
             all_descriptions.append(description)

@@ -1,26 +1,41 @@
 from pathlib import Path
 from typing import Dict, List, Tuple
-import re
 
 
 def parse_dat_file(
     dat_path: Path,
-    geometry_line_types: List[int]
+    geometry_line_types: List[int],
+    ldraw_parts_dir: Path = None,
+    _visited: set = None
 ) -> Tuple[Dict, List[Dict]]:
     """
     Parses a single LDraw .dat file into two structures:
     - description : metadata from header comment lines (line type 0)
     - coordinates : geometry rows from line types 2, 3, 4
 
+    Recursively resolves line type 1 sub-part references
+    to extract full geometry.
+
     Args:
-        dat_path             : Path to the .dat file
-        geometry_line_types  : Which line types to extract as geometry (from config)
+        dat_path            : Path to the .dat file
+        geometry_line_types : Which line types to extract as geometry
+        ldraw_parts_dir     : Root parts directory for resolving sub-parts
+        _visited            : Internal set to prevent infinite recursion
 
     Returns:
         Tuple of (description_dict, list_of_coordinate_dicts)
     """
 
-    part_id     = dat_path.stem  # filename without .dat = part_id
+    # ── Guard against infinite recursion ──────────────────────────────────
+    if _visited is None:
+        _visited = set()
+
+    real_path = str(dat_path.resolve())
+    if real_path in _visited:
+        return _init_description(dat_path.stem), []
+    _visited.add(real_path)
+
+    part_id     = dat_path.stem
     description = _init_description(part_id)
     coordinates = []
 
@@ -30,13 +45,11 @@ def parse_dat_file(
     for raw_line in lines:
         line = raw_line.strip()
 
-        # ── Skip empty lines ───────────────────────────────────────────────
         if not line:
             continue
 
         tokens = line.split()
 
-        # ── Skip if no valid line type token ───────────────────────────────
         if not tokens[0].lstrip("-").isdigit():
             continue
 
@@ -47,7 +60,26 @@ def parse_dat_file(
             _extract_metadata(tokens, description)
             continue
 
-        # ── Line types 2, 3, 4 — geometry ─────────────────────────────────
+        # ── Line type 1 — sub-part reference ──────────────────────────────
+        # Format: 1 colour x y z a b c d e f g h i filename
+        if line_type == 1 and ldraw_parts_dir and len(tokens) >= 15:
+            sub_filename = tokens[14]
+            sub_path     = _resolve_subpart(sub_filename, ldraw_parts_dir, dat_path.parent)
+
+            if sub_path and sub_path.exists():
+                _, sub_coords = parse_dat_file(
+                    dat_path            = sub_path,
+                    geometry_line_types = geometry_line_types,
+                    ldraw_parts_dir     = ldraw_parts_dir,
+                    _visited            = _visited
+                )
+                # Tag sub-part coordinates with the root part_id
+                for coord in sub_coords:
+                    coord["part_id"] = part_id
+                coordinates.extend(sub_coords)
+            continue
+
+        # ── Line types 2, 3, 4 — direct geometry ──────────────────────────
         if line_type in geometry_line_types:
             coord_row = _extract_coordinates(part_id, line_type, tokens)
             if coord_row:
@@ -55,6 +87,46 @@ def parse_dat_file(
 
     return description, coordinates
 
+
+# ── Private Helpers ────────────────────────────────────────────────────────
+
+def _resolve_subpart(
+    filename        : str,
+    ldraw_parts_dir : Path,
+    current_dir     : Path
+) -> Path:
+    """
+    Resolves a sub-part filename to an actual file path.
+    LDraw sub-parts can live in:
+        - ldraw/parts/s/         (sub-parts folder)
+        - ldraw/parts/           (main parts folder)
+        - ldraw/p/               (primitives folder)
+
+    Args:
+        filename        : Sub-part filename e.g. "s\\3001s01.dat" or "stud.dat"
+        ldraw_parts_dir : Root parts directory
+        current_dir     : Directory of the current .dat file
+
+    Returns:
+        Resolved Path or None if not found
+    """
+
+    # Normalise path separators
+    normalised = filename.replace("\\", "/")
+
+    # Search locations in order of priority
+    search_paths = [
+        ldraw_parts_dir / normalised,                    # ldraw/parts/s/3001s01.dat
+        ldraw_parts_dir / normalised.split("/")[-1],     # ldraw/parts/3001s01.dat
+        ldraw_parts_dir.parent / "p" / normalised,       # ldraw/p/stud.dat
+        current_dir / normalised                         # same directory
+    ]
+
+    for path in search_paths:
+        if path.exists():
+            return path
+
+    return None
 
 
 def _init_description(part_id: str) -> Dict:
@@ -71,59 +143,42 @@ def _extract_metadata(tokens: List[str], description: Dict) -> None:
     """
     Extracts metadata from line type 0 comment lines.
     Mutates description dict in place.
-
-    LDraw header example:
-        0 Brick 2 x 4
-        0 Name: 3001.dat
-        0 Author: James Jessiman
-        0 !LICENSE Licensed under CC BY 4.0
     """
     if len(tokens) < 2:
         return
 
-    # Join everything after the line type
     content = " ".join(tokens[1:])
 
-    # ── Part name — first non-keyword comment line ─────────────────────────
     if (
         description["part_name"] is None
         and not content.startswith("Name:")
         and not content.startswith("Author:")
         and not content.startswith("!")
         and not content.startswith("FILE")
+        and not content.startswith("BFC")
     ):
         description["part_name"] = content
 
-    # ── Author ─────────────────────────────────────────────────────────────
     elif content.startswith("Author:"):
         description["author"] = content.replace("Author:", "").strip()
 
-    # ── License ────────────────────────────────────────────────────────────
     elif content.startswith("!LICENSE"):
         description["license"] = content.replace("!LICENSE", "").strip()
 
 
 def _extract_coordinates(
-    part_id: str,
-    line_type: int,
-    tokens: List[str]
+    part_id   : str,
+    line_type : int,
+    tokens    : List[str]
 ) -> Dict:
     """
     Extracts coordinate row from a geometry line.
 
-    LDraw geometry format:
-        type  colour  x1 y1 z1  x2 y2 z2  [x3 y3 z3]  [x4 y4 z4]
-
-    Line type 2 → 2 vertices → 7  tokens after type (colour + 6 coords)
-    Line type 3 → 3 vertices → 10 tokens after type (colour + 9 coords)
-    Line type 4 → 4 vertices → 13 tokens after type (colour + 12 coords)
-
-    Returns:
-        Dict with part_id, line_type, colour, x1..z4 (NULL if not applicable)
-        None if line is malformed
+    Line type 2 → 2 vertices →  8 tokens total
+    Line type 3 → 3 vertices → 11 tokens total
+    Line type 4 → 4 vertices → 14 tokens total
     """
 
-    # Expected token counts per line type (including the line_type token itself)
     expected_tokens = {2: 8, 3: 11, 4: 14}
 
     if len(tokens) < expected_tokens.get(line_type, 0):
@@ -131,12 +186,7 @@ def _extract_coordinates(
 
     try:
         colour = tokens[1]
-
-        # ── Parse all available coordinates ───────────────────────────────
         coords = [float(t) for t in tokens[2:expected_tokens[line_type]]]
-
-        # ── Build row with NULLs for missing vertices ──────────────────────
-        # Pad to always have 12 coordinate values (4 vertices x 3 axes)
         padded = coords + [None] * (12 - len(coords))
 
         return {
@@ -150,4 +200,4 @@ def _extract_coordinates(
         }
 
     except (ValueError, IndexError):
-        return None     
+        return None

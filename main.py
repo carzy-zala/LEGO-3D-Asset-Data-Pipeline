@@ -9,19 +9,33 @@ from src.transformation.bronze.ldraw.src.DS2B_ldraw_job import run_ldraw_bronze
 from src.transformation.silver.rebrickable.src.B2S_rebrickable_job import run_rebrickable_silver
 from src.transformation.silver.ldraw.src.B2S_ldraw_job import run_ldraw_silver
 from src.transformation.gold.src.S2G_gold_job import run_gold
+from src.ml_ready.data_loader import load_part_as_point_cloud
+
+from config import PARTS_TO_PROCESS
 
 if __name__ == "__main__":
-    # Stage 1 — Ingestion
+
+    # ── Stage 1 — Ingestion ────────────────────────────────────────────
     download_rebrickable_files()
     download_ldraw_files()
 
-    # Stage 2 — Bronze
+    # ── Stage 2 — Bronze ───────────────────────────────────────────────
     run_rebrickable_bronze()
     run_ldraw_bronze()
 
-    # Stage 3 — Silver
+    # ── Stage 3 — Silver ───────────────────────────────────────────────
     run_rebrickable_silver()
     run_ldraw_silver()
 
-    # Stage 4 — Gold
+    # ── Stage 4 — Gold ─────────────────────────────────────────────────
     run_gold()
+
+    # ── Stage 5 — ML Readiness Check ───────────────────────────────────
+    print("\n" + "=" * 60)
+    print("ML READINESS CHECK")
+    print("=" * 60)
+    for part_id in PARTS_TO_PROCESS:
+        point_cloud = load_part_as_point_cloud(part_id)
+        print(f"  {part_id} → {point_cloud.shape} points loaded")
+    print("=" * 60)
+    print("Pipeline complete — data is ML ready")

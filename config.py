@@ -46,3 +46,8 @@ REBRICKABLE_FILES = [
 LDRAW_COMPLETE_ZIP_URL  = "https://library.ldraw.org/library/updates/complete.zip"
 LDRAW_ZIP_LOCAL         = RAW_LDRAW_DIR / "complete.zip"
 LDRAW_PARTS_ZIP_PREFIX  = "ldraw/parts/"
+
+# ── LDraw Library (extracted) ───────────────────────────────────────────────
+LDRAW_LIBRARY_DIR       = RAW_LDRAW_DIR / "library"
+LDRAW_LIBRARY_PARTS_DIR = LDRAW_LIBRARY_DIR / "parts"
+LDRAW_LIBRARY_P_DIR     = LDRAW_LIBRARY_DIR / "p"
