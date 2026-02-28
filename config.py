@@ -9,6 +9,11 @@ RAW_DIR                 = DATA_DIR / "raw"
 RAW_REBRICKABLE_DIR     = RAW_DIR / "rebrickable"
 RAW_LDRAW_DIR           = RAW_DIR / "ldraw"
 
+# Processed  ───────────────────────────────────────────────────────────────
+PROCESSED_DIR           = DATA_DIR / "processed"
+BRONZE_DIR              = PROCESSED_DIR / "bronze"
+BRONZE_CATALOGUE_DIR    = BRONZE_DIR / "catalogue"
+
 
 PARTS_TO_PROCESS = [
     "3001",   # Brick 2x4

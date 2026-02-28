@@ -1,0 +1,28 @@
+{
+  "files": [
+    {
+      "source_file": "parts.csv",
+      "output_file": "parts.csv",
+      "keep_columns": ["part_num", "name", "part_cat_id", "part_material"],
+      "filter_by_parts": true
+    },
+    {
+      "source_file": "colors.csv",
+      "output_file": "colors.csv",
+      "keep_columns": ["id", "name", "rgb", "is_trans"],
+      "filter_by_parts": false
+    },
+    {
+      "source_file": "part_categories.csv",
+      "output_file": "part_categories.csv",
+      "keep_columns": ["id", "name"],
+      "filter_by_parts": false
+    },
+    {
+      "source_file": "inventory_parts.csv",
+      "output_file": "inventory_parts.csv",
+      "keep_columns": ["part_num", "color_id", "quantity"],
+      "filter_by_parts": true
+    }
+  ]
+}
