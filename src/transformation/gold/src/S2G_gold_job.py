@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 from pathlib import Path
-from datetime import datetime
+from datetime import UTC, datetime
 
 from config import (
     SILVER_DIR,
@@ -14,7 +14,6 @@ from src.transformation.gold.src.S2G_gold import build_part_json
 
 logger = get_logger("gold")
 
-# Config and output paths
 CONFIG_PATH      = Path(__file__).parent.parent / "config" / "S2G_gold_config.json"
 SILVER_LDRAW_DIR = SILVER_DIR / "ldraw"
 SILVER_REB_DIR   = SILVER_DIR / "rebrickable"
@@ -142,7 +141,7 @@ def _write_manifest(
 
     manifest = {
         "pipeline_version" : PIPELINE_VERSION,
-        "processed_date"   : datetime.utcnow().strftime("%Y-%m-%d"),
+        "processed_date": datetime.now(UTC).strftime("%Y-%m-%d"),
         "total_parts"      : len(manifest_parts),
         "valid_parts"      : valid_count,
         "invalid_parts"    : invalid_count,
