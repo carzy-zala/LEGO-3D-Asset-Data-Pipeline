@@ -1,0 +1,57 @@
+{
+  "input": {
+    "parts_file"           : "parts.csv",
+    "colors_file"          : "colors.csv",
+    "part_categories_file" : "part_categories.csv",
+    "inventory_parts_file" : "inventory_parts.csv"
+  },
+  "output_file": "rebrickable_catalogue.csv",
+  "joins": [
+    {
+      "description"  : "Join parts with part_categories on part_cat_id = id",
+      "left"         : "parts",
+      "right"        : "part_categories",
+      "left_on"      : "part_cat_id",
+      "right_on"     : "id",
+      "how"          : "left",
+      "rename"       : { "name_x": "part_name", "name_y": "category_name" },
+      "drop_columns" : ["part_cat_id", "id"]
+    },
+    {
+      "description"  : "Join with inventory_parts to get color_id and quantity",
+      "left"         : "result",
+      "right"        : "inventory_parts",
+      "left_on"      : "part_num",
+      "right_on"     : "part_num",
+      "how"          : "left",
+      "rename"       : {},
+      "drop_columns" : []
+    },
+    {
+      "description"  : "Join with colors to resolve color_id to name and rgb",
+      "left"         : "result",
+      "right"        : "colors",
+      "left_on"      : "color_id",
+      "right_on"     : "id",
+      "how"          : "left",
+      "rename"       : { "name": "color_name" },
+      "drop_columns" : ["id"]
+    }
+  ],
+  "validation_rules": {
+    "required_columns" : ["part_num", "part_name", "category_name", "material", "color_name", "rgb"],
+    "not_null_columns" : ["part_num", "part_name"],
+    "allowed_materials": ["Plastic", "Rubber", "Metal", "Foam", "Fabric", "Paper", "Cork"]
+  },
+  "output_columns": [
+    "part_num",
+    "part_name",
+    "category_name",
+    "part_material",
+    "color_id",
+    "color_name",
+    "rgb",
+    "is_trans",
+    "quantity"
+  ]
+}
