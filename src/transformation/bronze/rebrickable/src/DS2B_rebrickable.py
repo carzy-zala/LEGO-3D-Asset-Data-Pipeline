@@ -37,8 +37,8 @@ def filter_csv(
     if filter_by_parts and "part_num" in df.columns:
         df = df[df["part_num"].isin(parts_to_process)]
 
-    df = df.apply(lambda col: col.str.strip() if col.dtype == "object" else col)
+    for col in df.columns:
+        if pd.api.types.is_string_dtype(df[col]):
+            df[col] = df[col].str.strip()
 
-    df = df.reset_index(drop=True)
-
-    return df
+    return df.reset_index(drop=True)
