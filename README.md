@@ -6,7 +6,7 @@ A production-grade, end-to-end AI data pipeline that ingests raw LEGO 3D geometr
 
 ## Problem Statement
 
-LEGO Digital Play is building AI systems that understand LEGO's design language — how bricks connect, combine, and behave as a system. To train such models, you need a reliable, reproducible, and high-quality dataset of LEGO 3D assets enriched with metadata.
+AI systems that understand LEGO's design language — how bricks connect, combine, and behave as a system. To train such models, you need a reliable, reproducible, and high-quality dataset of LEGO 3D assets enriched with metadata.
 
 The challenge is that raw LEGO 3D data exists across two separate sources:
 
