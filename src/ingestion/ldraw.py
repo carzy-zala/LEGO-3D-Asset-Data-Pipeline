@@ -4,7 +4,6 @@ from pathlib import Path
 from config import (
     RAW_LDRAW_DIR,
     PARTS_TO_PROCESS,
-    LDRAW_COMPLETE_ZIP_URL,
     LDRAW_ZIP_LOCAL,
     LDRAW_PARTS_ZIP_PREFIX,
     LDRAW_LIBRARY_DIR
