@@ -1,0 +1,27 @@
+{
+  "input": {
+    "description_file" : "geometry_description.csv",
+    "coordinates_file" : "geometry_coordinates.csv"
+  },
+  "output": {
+    "description_file" : "geometry_description.csv",
+    "coordinates_file" : "geometry_coordinates.csv"
+  },
+  "description_validation": {
+    "not_null_columns" : ["part_id", "part_name"]
+  },
+  "coordinates_validation": {
+    "valid_line_types"    : [2, 3, 4],
+    "vertex_requirements" : {
+      "2": ["x1","y1","z1","x2","y2","z2"],
+      "3": ["x1","y1","z1","x2","y2","z2","x3","y3","z3"],
+      "4": ["x1","y1","z1","x2","y2","z2","x3","y3","z3","x4","y4","z4"]
+    },
+    "numeric_columns": [
+      "x1","y1","z1",
+      "x2","y2","z2",
+      "x3","y3","z3",
+      "x4","y4","z4"
+    ]
+  }
+}
