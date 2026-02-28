@@ -2,7 +2,6 @@ import sys
 from pathlib import Path
 
 from src.transformation.bronze.ldraw.src.DS2B_ldraw_job import run_ldraw_bronze
-from src.transformation.silver.rebrickable.src.B2S_rebrickable_job import run_rebrickable_silver
 sys.path.insert(0, str(Path(__file__).parent))
 
 from src.ingestion.rebrickable import download_rebrickable_files

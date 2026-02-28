@@ -56,7 +56,6 @@ def parse_dat_file(
     return description, coordinates
 
 
-# ── Private Helpers ────────────────────────────────────────────────────────
 
 def _init_description(part_id: str) -> Dict:
     """Returns empty description dict for a part."""
