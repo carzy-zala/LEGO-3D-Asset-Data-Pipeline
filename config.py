@@ -9,13 +9,16 @@ RAW_DIR                 = DATA_DIR / "raw"
 RAW_REBRICKABLE_DIR     = RAW_DIR / "rebrickable"
 RAW_LDRAW_DIR           = RAW_DIR / "ldraw"
 
-# Processed  ───────────────────────────────────────────────────────────────
+# ── Processed ──────────────────────────────────────────────────────────────
 PROCESSED_DIR           = DATA_DIR / "processed"
 BRONZE_DIR              = PROCESSED_DIR / "bronze"
-BRONZE_CATALOGUE_DIR    = BRONZE_DIR / "catalogue"
 BRONZE_GEOMETRY_DIR     = BRONZE_DIR / "geometry"
+BRONZE_CATALOGUE_DIR    = BRONZE_DIR / "catalogue"
 SILVER_DIR              = PROCESSED_DIR / "silver"
+GOLD_DIR                = PROCESSED_DIR / "gold"
 
+# ── Pipeline Settings ──────────────────────────────────────────────────────
+PIPELINE_VERSION        = "1.0.0"
 
 PARTS_TO_PROCESS = [
     "3001",   # Brick 2x4
@@ -40,5 +43,6 @@ REBRICKABLE_FILES = [
 ]
 
 # ── LDraw ──────────────────────────────────────────────────────────────────
+LDRAW_COMPLETE_ZIP_URL  = "https://library.ldraw.org/library/updates/complete.zip"
 LDRAW_ZIP_LOCAL         = RAW_LDRAW_DIR / "complete.zip"
 LDRAW_PARTS_ZIP_PREFIX  = "ldraw/parts/"

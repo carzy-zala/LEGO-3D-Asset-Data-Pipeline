@@ -1,0 +1,23 @@
+{
+  "input": {
+    "ldraw_description_file" : "geometry_description.csv",
+    "ldraw_coordinates_file" : "geometry_coordinates.csv",
+    "rebrickable_file"       : "rebrickable_catalogue.csv"
+  },
+  "join_key": {
+    "ldraw"       : "part_id",
+    "rebrickable" : "part_num"
+  },
+  "output": {
+    "parts_dir"     : "parts",
+    "manifest_file" : "manifest.json"
+  },
+  "coordinate_fields": [
+    "line_type",
+    "colour",
+    "x1","y1","z1",
+    "x2","y2","z2",
+    "x3","y3","z3",
+    "x4","y4","z4"
+  ]
+}
