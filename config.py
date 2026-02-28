@@ -14,7 +14,7 @@ PROCESSED_DIR           = DATA_DIR / "processed"
 BRONZE_DIR              = PROCESSED_DIR / "bronze"
 BRONZE_CATALOGUE_DIR    = BRONZE_DIR / "catalogue"
 BRONZE_GEOMETRY_DIR     = BRONZE_DIR / "geometry"
-
+SILVER_DIR              = PROCESSED_DIR / "silver"
 
 
 PARTS_TO_PROCESS = [
