@@ -87,9 +87,17 @@ pip install -r requirements.txt
 python main.py
 ```
 ## Pipeline Output
+
+### Pipeline Run
 ![Pipeline Run](docs/screenshots/01_pipeline_run.png)
+
+### Gold Output
 ![Gold Output](docs/screenshots/02_gold_3001_json.png)
+
+### ML Readiness
 ![ML Readiness](docs/screenshots/03_ml_readiness.png)
+
+### Folder Strcture After Run
 ![Folder Strcture After Run](docs/screenshots/04_folder_structure.png)
 ---
 
