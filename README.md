@@ -1,3 +1,5 @@
+![Pipeline Workflow](LEGO_Pipeline_Walkthrough.mp4)
+
 # LEGO 3D Asset Data Pipeline
 
 A production-grade, end-to-end AI data pipeline that ingests raw LEGO 3D geometry and catalogue metadata, processes it through a Medallion architecture (Bronze → Silver → Gold), and delivers clean, validated, enriched datasets ready for AI and machine learning model training.
