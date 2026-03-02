@@ -59,8 +59,8 @@ Both datasets are free and publicly available. This pipeline downloads them auto
 
 **1. Clone the repository**
 ```bash
-git clone https://github.com/your-username/lego-ai-pipeline.git
-cd lego-ai-pipeline
+git clone https://github.com/carzy-zala/LEGO-3D-Asset-Data-Pipeline.git
+cd LEGO-3D-Asset-Data-Pipeline
 ```
 
 **2. Create virtual environment**
