@@ -1,4 +1,4 @@
-![Pipeline Workflow](LEGO_Pipeline_Walkthrough.mp4)
+![LEGO_Pipeline_Walkthrough.mp4](https://github.com/carzy-zala/LEGO-3D-Asset-Data-Pipeline/blob/main/docs/video/LEGO_Pipeline_Walkthrough.mp4)
 
 # LEGO 3D Asset Data Pipeline
 
