@@ -86,7 +86,11 @@ pip install -r requirements.txt
 ```bash
 python main.py
 ```
-
+## Pipeline Output
+![Pipeline Run](docs/screenshots/01_pipeline_run.png)
+![Gold Output](docs/screenshots/02_gold_3001_json.png)
+![ML Readiness](docs/screenshots/03_ml_readiness.png)
+![Folder Strcture After Run](docs/screenshots/04_folder_structure.png)
 ---
 
 ## Project Structure
